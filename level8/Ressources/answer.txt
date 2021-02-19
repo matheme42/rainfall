@@ -1,0 +1,7 @@
+pour reussir ce niveau il suffit d'ecrire l'un apres l'autre les mots
+'auth '
+'service eeeeeeeeeeeeeee'
+'login'
+une fois ces mots ecrits, cela ouvre un shell que l'on peux ensuite utiliser pour acceder au .pass du niveau 9
+
+le fait d'ecrire 'service eeeeeeeeeeeeeee' creer un overflow sur le buffer get's qui ne fait que 5 de long ce qui viens ensuite valider le if _auth[8] == 0 qui permet de faire un appel a system("/bin/sh")

