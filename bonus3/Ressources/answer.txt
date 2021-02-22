@@ -1,0 +1,3 @@
+pour le bonus3
+
+le programme ouvre le contenu du .pass et effectue une comparaison avec notre premier argument si la comparaison est egal a 0 le programme nous ouvre un shellcode il suffit d'executer le bonus3 avec un argument vide pour remplir cette condition.

