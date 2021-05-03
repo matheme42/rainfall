@@ -1,2 +1,5 @@
-ouvrir level0 a l'aide de cutter pour comprendre sa consctruction
+ouvrir level0 a l'aide de cutter ou gdb pour comprendre sa consctruction
 et executer le programme avec l'argument 423 afin d'ouvrir un shell avec les droits de level1
+
+$ cat /home/user/level1/.pass
+1fe8a524fa4bec01ca4ea2a869af2a02260d4a7d5fe7e7c24d8617e6dca12d3a

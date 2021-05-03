@@ -1,3 +1,7 @@
-pour le bonus3
-
-le programme ouvre le contenu du .pass et effectue une comparaison avec notre premier argument si la comparaison est egal a 0 le programme nous ouvre un shellcode il suffit d'executer le bonus3 avec un argument vide pour remplir cette condition.
+le programme bonus3 ouvre 2 exemplaires du password de fin. Il va en garder un pour pouvoir nous l'afficher au complet.
+Pour le 2 eme exemplaire, on remarque qu'il va effectuer mettre un '\0' en fonction de la longeur de notre premier argument.
+in va ensuite faire une comparaison entre notre premier argument et cette chaine de caractere modifié. Il suffit donc de
+donné une chaine vide pour que la fonction strcmp compare '\0' avec '\0'adasdadfeacses il va donc s'arreter au premier caractere
+et nous lancer le shellcode.
+$ cat /home/user/end/.pass
+3321b6f81659f9a71c76616f606e4b50189cecfea611393d5d649f75e157353c

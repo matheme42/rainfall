@@ -5,3 +5,6 @@ pour reussir ce niveau il suffit d'ecrire l'un apres l'autre les mots
 une fois ces mots ecrits, cela ouvre un shell que l'on peux ensuite utiliser pour acceder au .pass du niveau 9
 
 le fait d'ecrire 'service eeeeeeeeeeeeeee' creer un overflow sur le buffer get's qui ne fait que 5 de long ce qui viens ensuite valider le if _auth[8] == 0 qui permet de faire un appel a system("/bin/sh")
+
+$ cat /home/user/level9/.pass
+c542e581c5ba5162a85f767996e3247ed619ef6c6f7b76a59435545dc6259f8a

